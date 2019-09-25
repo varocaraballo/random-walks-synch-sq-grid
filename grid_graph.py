@@ -78,39 +78,39 @@ def getGridTransitionMatrix(n,m):
 
 
 def gridMixingTime(n,m, e = frac.Fraction(1,4)):
-    e = e**2
+    #e = e**2
     M = getGridTransitionMatrix(n,m)
     t = n*m
     I = np.identity(t, dtype=float)    
     error = float('inf')
     c = 0
-    stationary = frac.Fraction(1,t)*np.ones(t, dtype=frac.Fraction)
+    #stateM = frac.Fraction(1,t)*np.ones((t,t), dtype=frac.Fraction)
+    stateM = (1.0/t)*np.ones((t,t), dtype=float)
     while error>=e:
         c += 1
         I = np.dot(I,M)
-        error = -1
-        for i in range(t):
-            dif = np.matrix(I[i]-stationary)
-            error = max(error, np.dot(dif,np.transpose(dif)))        
+        error = np.linalg.norm(I-stateM)
+        #for i in range(t):
+        #    dif = np.matrix(I[i]-stationary)
+        #    error = max(error, np.dot(dif,np.transpose(dif)))        
     return c
 
 def grid2PoweredMixingTime(n,m, e = frac.Fraction(1,4)):
-    e = e**2
+    #e = e**2
     M = getGridTransitionMatrix(n,m)
     t = n*m
-    error = -1
+    error = float('inf')
     c = 1
-    stationary = frac.Fraction(1,t)*np.ones(t, dtype=frac.Fraction)
-    for i in range(t):
-            dif = np.matrix(M[i]-stationary)
-            error = max(error, np.dot(dif,np.transpose(dif)))       
+    #stateM = frac.Fraction(1,t)*np.ones((t,t), dtype=frac.Fraction)    
+    stateM = (1.0/t)*np.ones((t,t), dtype=float)
     while error>=e:
         c *= 2
         M = np.dot(M,M)
-        error = -1
-        for i in range(t):
-            dif = np.matrix(M[i]-stationary)
-            error = max(error, np.dot(dif,np.transpose(dif)))        
+        error = np.linalg.norm(M-stateM)
+        #error = -1
+        #for i in range(t):
+        #    dif = np.matrix(M[i]-stationary)
+        #    error = max(error, np.dot(dif,np.transpose(dif)))        
     return c
         
 
